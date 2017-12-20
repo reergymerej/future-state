@@ -1,20 +1,13 @@
-const getValueByPath = (obj, path) => {
-  if (obj) {
-    let value
-
-    const parts = path.split('.')
-    const part = parts.shift()
-    const thing = obj[part]
-
-    if (parts.length) {
-      return getValueByPath(thing, parts.join('.'))
-    } else {
-      return thing
-    }
-  }
+const getValueByPath = (obj = {}, path) => {
+  const parts = path.split('.')
+  const part = parts.shift()
+  const currentValue = obj[part]
+  return parts.length
+    ? getValueByPath(currentValue, parts.join('.'))
+    : currentValue
 }
 
-const getFutureStoreValues = (store, valuePath) =>
+const getFutureStoreValue = (store, valuePath) =>
   new Promise((resolve) => {
     const unsubscribe = store.subscribe(() => {
       const state = store.getState()
@@ -26,8 +19,8 @@ const getFutureStoreValues = (store, valuePath) =>
     })
   })
 
-
 const app = (store, value) => {
-  return getFutureStoreValues(store, value)
+  return getFutureStoreValue(store, value)
 }
+
 export default app
