@@ -31,4 +31,32 @@ describe('basic usage', () => {
     const result = await app(store, 'foo.bar.baz')
     expect(result).toBe(baz)
   })
+
+  it('should be resilient to non-existent values', async () => {
+    const weasel = 'I am the weasel!'
+    const reducer = (state = {}, action) => {
+      if (action.type === 'FIRST') {
+        return {
+          chicken: 'hi',
+        }
+      }
+      if (action.type === 'SECOND') {
+        return {
+          chicken: { spider: { weasel } },
+        }
+      }
+      return state
+    }
+    const store = createStore(reducer)
+    setTimeout(() => {
+      store.dispatch({
+        type: 'FIRST',
+      })
+      store.dispatch({
+        type: 'SECOND',
+      })
+    }, 0)
+
+    const result = await app(store, 'chicken.spider.weasel')
+  })
 })
