@@ -7,14 +7,26 @@ const getValueByPath = (obj = {}, path) => {
     : currentValue
 }
 
-const getFutureStoreValue = (store, valuePath) =>
+const getAllValues = (obj, valuePaths) => {
+  const allValues = valuePaths.map(path => getValueByPath(obj, path))
+  return allValues.filter(x => x !== undefined)
+}
+
+const getFutureStoreValue = (store, valuePaths) =>
   new Promise((resolve) => {
     const unsubscribe = store.subscribe(() => {
       const state = store.getState()
-      const value = getValueByPath(state, valuePath)
-      if (value !== undefined) {
+      const valuePathsArray = typeof valuePaths === 'string'
+        ? [valuePaths]
+        : valuePaths
+      const allValues = getAllValues(state, valuePathsArray)
+      if (allValues.length === valuePathsArray.length) {
         unsubscribe()
-        resolve(value)
+        if (allValues.length === 1) {
+          resolve(allValues[0])
+        } else {
+          resolve(allValues)
+        }
       }
     })
   })

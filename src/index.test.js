@@ -59,4 +59,42 @@ describe('basic usage', () => {
 
     const result = await app(store, 'chicken.spider.weasel')
   })
+
+  it('should wait for multiple values too', async () => {
+    const weasel = 'I am the weasel!'
+    const reducer = (state = {}, action) => {
+      if (action.type === 'FIRST') {
+        return {
+          ...state,
+          chicken: { spider: { weasel: 'iron' } },
+        }
+      }
+      if (action.type === 'SECOND') {
+        return {
+          ...state,
+          dolphin: { surfboard: 'wine' },
+        }
+      }
+      return state
+    }
+    const store = createStore(reducer)
+    setTimeout(() => {
+      store.dispatch({
+        type: 'FIRST',
+      })
+      store.dispatch({
+        type: 'SECOND',
+      })
+    }, 0)
+
+    const result = await app(store, [
+      'chicken.spider.weasel',
+      'dolphin.surfboard',
+    ])
+
+    expect(result).toEqual([
+      'iron',
+      'wine',
+    ])
+  })
 })
