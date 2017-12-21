@@ -1,5 +1,8 @@
 # future-state
 
+[![Build Status](https://travis-ci.org/reergymerej/future-state.svg?branch=master)](https://travis-ci.org/reergymerej/future-state)
+
+
 
 ## Usage
 
@@ -17,8 +20,6 @@ futureState(reduxStore, ['foo.bar.baz', 'bingo.bango'])
     console.log('bingo.bango', values[1])
   })
 ```
-
-
 
 
 
