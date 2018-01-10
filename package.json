@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "future-state",
   "description": "Subscribe to future values in a Redux store.",
   "main": "lib/index.js",
